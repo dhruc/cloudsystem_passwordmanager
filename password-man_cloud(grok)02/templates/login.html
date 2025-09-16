@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h2>Login</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label>Username</label>
+        <input type="text" name="username" required class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Master Password</label>
+        <input type="password" name="master_password" required class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>2FA Code (if enabled)</label>
+        <input type="text" name="totp" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</form>
+<a href="{{ url_for('register') }}">Register</a>
+{% endblock %}

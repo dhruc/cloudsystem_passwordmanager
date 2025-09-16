@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h2>Settings</h2>
+<form method="POST">
+    <h3>Cloud Sync (Nextcloud)</h3>
+    <div class="mb-3">
+        <label>URL (e.g., https://your.nextcloud.com)</label>
+        <input type="text" name="cloud_url" value="{{ user.cloud_url }}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Username</label>
+        <input type="text" name="cloud_user" value="{% if user.cloud_user %}{{ decrypt(user.cloud_user, key) }}{% endif %}" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <input type="password" name="cloud_pw" class="form-control">
+    </div>
+    <h3>Enable 2FA</h3>
+    <button type="submit" name="enable_2fa" class="btn btn-primary">Enable 2FA (Scan QR)</button>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<input type="text" id="search" placeholder="Search sites..." class="form-control mb-3" onkeyup="filterEntries()">
+<a href="{{ url_for('add_password') }}" class="btn btn-success mb-3">Add</a>
+<a href="#" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#exportModal">Export Vault</a>
+<a href="#" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#importModal">Import Vault</a>
+<table id="entryTable" class="table">
+    <thead>
+        <tr>
+            <th>Site</th>
+            <th>Username</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.site }}</td>
+            <td>{{ entry.username }}</td>
+            <td>
+                <button class="btn btn-sm btn-primary" onclick="showPassword({{ entry.id }})">Show Password</button>
+                <a href="{{ url_for('edit_password', id=entry.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{{ url_for('delete_password', id=entry.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="modal fade" id="exportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Export Vault</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="exportData" class="form-control" rows="5"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="fetchExport()">Fetch Export</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Import Vault</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="importForm" method="POST" action="{{ url_for('import_vault') }}">
+                    <textarea name="encrypted_vault" class="form-control" rows="5" placeholder="Paste encrypted JSON here" required></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" form="importForm" class="btn btn-primary">Import</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
