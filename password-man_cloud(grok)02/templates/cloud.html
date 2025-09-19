@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Cloud Storage{% endblock %}
+{% block content %}
+<h2 class="mb-4">Cloud Storage</h2>
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3" aria-label="Back to Dashboard">Back to Dashboard</a>
+
+<!-- File Upload Form -->
+<form method="POST" enctype="multipart/form-data" action="{{ url_for('cloud_upload') }}" class="row g-3 needs-validation" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="col-md-6">
+        <label for="file" class="form-label">{{ form.file.label }}</label>
+        {{ form.file(class="form-control", required=True) }}
+        {% if form.file.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.file.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        <div id="fileHelp" class="form-text">Select a file to upload (any type supported).</div>
+    </div>
+    <div class="col-12">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+
+<!-- File List -->
+<div class="table-responsive mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Filename</th>
+                <th scope="col">Size (KB)</th>
+                <th scope="col">Modified</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.filename }}</td>
+                <td>{{ (file.size / 1024) | round(2) }}</td>
+                <td>{{ file.modified.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>
+                    <a href="{{ url_for('cloud_download', file_id=file.id) }}" class="btn btn-sm btn-success" aria-label="Download {{ file.filename }}">Download</a>
+                    <a href="{{ url_for('cloud_delete', file_id=file.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete {{ file.filename }}?');" aria-label="Delete {{ file.filename }}">Delete</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="text-center">No files uploaded.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

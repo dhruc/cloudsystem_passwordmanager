@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Import Vault{% endblock %}
+{% block content %}
+<h2 class="mb-4">Import Vault</h2>
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3" aria-label="Back to Dashboard">Back to Dashboard</a>
+<form method="POST" class="row g-3 needs-validation" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="col-12">
+        <label for="encrypted_vault" class="form-label">{{ form.encrypted_vault.label }}</label>
+        {{ form.encrypted_vault(class="form-control", rows=5, required=True) }}
+        {% if form.encrypted_vault.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.encrypted_vault.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-12">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

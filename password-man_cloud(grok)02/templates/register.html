@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+<h2 class="mb-4">Register</h2>
+<form method="POST" class="row g-3 needs-validation" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="col-md-6">
+        <label for="username" class="form-label">{{ form.username.label }}</label>
+        {{ form.username(class="form-control", required=True) }}
+        {% if form.username.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.username.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <label for="master_password" class="form-label">{{ form.master_password.label }}</label>
+        {{ form.master_password(class="form-control", required=True) }}
+        {% if form.master_password.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.master_password.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-12">
+        {{ form.submit(class="btn btn-primary") }}
+        <a href="{{ url_for('login') }}" class="btn btn-link">Back to Login</a>
+    </div>
+</form>
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}

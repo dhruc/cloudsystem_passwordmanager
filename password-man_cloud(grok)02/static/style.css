@@ -1,0 +1,34 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.btn {
+    margin-right: 5px;
+}
+
+.alert {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 576px) {
+    h2 {
+        font-size: 1.5rem;
+    }
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .form-control, .form-check-input, .form-label {
+        font-size: 0.9rem;
+    }
+}

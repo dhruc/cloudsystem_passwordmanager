@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h2 class="mb-4">Settings</h2>
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3" aria-label="Back to Dashboard">Back to Dashboard</a>
+
+<form method="POST" class="row g-3 needs-validation" novalidate>
+    {{ form.hidden_tag() }}
+    <div class="col-md-6">
+        <label for="cloud_url" class="form-label">{{ form.cloud_url.label }}</label>
+        {{ form.cloud_url(class="form-control") }}
+        {% if form.cloud_url.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.cloud_url.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <label for="cloud_user" class="form-label">{{ form.cloud_user.label }}</label>
+        {{ form.cloud_user(class="form-control") }}
+        {% if form.cloud_user.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.cloud_user.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <label for="cloud_pw" class="form-label">{{ form.cloud_pw.label }}</label>
+        {{ form.cloud_pw(class="form-control") }}
+        {% if form.cloud_pw.errors %}
+            <div class="invalid-feedback">
+                {% for error in form.cloud_pw.errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <div class="form-check">
+            {{ form.enable_2fa(class="form-check-input") }}
+            <label class="form-check-label" for="enable_2fa">{{ form.enable_2fa.label }}</label>
+        </div>
+    </div>
+    <div class="col-12">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+
+{% if qr_data_uri %}
+<div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qrModalLabel">Scan 2FA QR Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="{{ qr_data_uri }}" alt="2FA QR Code" class="img-fluid">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var qrModal = new bootstrap.Modal(document.getElementById('qrModal'), {});
+    qrModal.show();
+</script>
+{% endif %}
+
+<script>
+    // Bootstrap form validation
+    (function () {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+</script>
+{% endblock %}
